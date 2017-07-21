@@ -529,7 +529,7 @@ public class TownyEntityListener implements Listener {
 
 		Block block = event.getBlock();
 		Entity entity = event.getEntity();
-		Entity passenger = entity.getPassenger();
+		List<Entity> passengers = entity.getPassengers();
 
 		TownyWorld World = null;
 
@@ -563,18 +563,20 @@ public class TownyEntityListener implements Listener {
 				 * Allow players in vehicles to activate pressure plates if they
 				 * are permitted.
 				 */
-				if (passenger != null && passenger instanceof Player) {
-
-					// PlayerInteractEvent newEvent = new
-					// PlayerInteractEvent((Player)passenger, Action.PHYSICAL,
-					// null, block, BlockFace.SELF);
-					// Bukkit.getServer().getPluginManager().callEvent(newEvent);
-
-					if (TownySettings.isSwitchMaterial(block.getType().name())) {
-						if (!plugin.getPlayerListener().onPlayerSwitchEvent((Player) passenger, block, null, World))
-							return;
+				for (Entity passenger : passengers) {
+					if (passenger != null && passenger instanceof Player) {
+	
+						// PlayerInteractEvent newEvent = new
+						// PlayerInteractEvent((Player)passenger, Action.PHYSICAL,
+						// null, block, BlockFace.SELF);
+						// Bukkit.getServer().getPluginManager().callEvent(newEvent);
+	
+						if (TownySettings.isSwitchMaterial(block.getType().name())) {
+							if (!plugin.getPlayerListener().onPlayerSwitchEvent((Player) passenger, block, null, World))
+								return;
+						}
+	
 					}
-
 				}
 
 				// System.out.println("EntityInteractEvent triggered for " +

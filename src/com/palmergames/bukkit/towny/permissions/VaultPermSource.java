@@ -1,13 +1,13 @@
 package com.palmergames.bukkit.towny.permissions;
 
-import net.milkbowl.vault.chat.Chat;
-
 import org.bukkit.entity.Player;
 
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.towny.TownySettings;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.util.BukkitTools;
+
+import net.milkbowl.vault.chat.Chat;
 
 public class VaultPermSource extends TownyPermissionSource {
 

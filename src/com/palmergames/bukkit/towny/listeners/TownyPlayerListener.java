@@ -27,6 +27,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Attachable;
 
@@ -169,7 +170,9 @@ public class TownyPlayerListener implements Listener {
 
 		// Test against the item in hand as we need to test the bucket contents
 		// we are trying to empty.
-		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), event.getPlayer().getItemInHand()));
+		ItemStack check = event.getPlayer().getInventory().getItemInMainHand();
+		ItemStack bucket = (check.getType() == Material.WATER_BUCKET) ?	check : event.getPlayer().getInventory().getItemInOffHand();
+		event.setCancelled(onPlayerInteract(event.getPlayer(), event.getBlockClicked(), bucket));
 
 		// Test on the resulting empty bucket to see if we have permission to
 		// empty a bucket.
@@ -229,7 +232,8 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Info Tool
 			 */
-			if (event.getPlayer().getItemInHand().getType() == Material.getMaterial(TownySettings.getTool())) {
+			ItemStack hand = (event.getHand() == EquipmentSlot.HAND) ? event.getPlayer().getInventory().getItemInMainHand() : event.getPlayer().getInventory().getItemInOffHand();
+			if (hand.getType() == Material.getMaterial(TownySettings.getTool())) {
 
 				if (TownyUniverse.getPermissionSource().isTownyAdmin(player)) {
 					if (event.getClickedBlock() instanceof Block) {
@@ -278,7 +282,6 @@ public class TownyPlayerListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractAtEntityEvent event) {
-
 		if (plugin.isError()) {
 			event.setCancelled(true);
 			return;
@@ -343,12 +346,13 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Item_use protection.
 			 */
-			if (event.getPlayer().getItemInHand() != null) {
+			ItemStack hand = (event.getHand() == EquipmentSlot.HAND) ? event.getPlayer().getInventory().getItemInMainHand() : event.getPlayer().getInventory().getItemInOffHand();
+			if (hand != null) {
 
 				/*
 				 * Info Tool
 				 */
-				if (event.getPlayer().getItemInHand().getType() == Material.getMaterial(TownySettings.getTool())) {
+				if (hand.getType() == Material.getMaterial(TownySettings.getTool())) {
 
 					Entity entity = event.getRightClicked();
 
@@ -361,8 +365,8 @@ public class TownyPlayerListener implements Listener {
 
 				}
 
-				if (TownySettings.isItemUseMaterial(event.getPlayer().getItemInHand().getType().name())) {
-					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
+				if (TownySettings.isItemUseMaterial(hand.getType().name())) {
+					event.setCancelled(onPlayerInteract(event.getPlayer(), null, hand));
 					return;
 				}
 			}
@@ -472,12 +476,13 @@ public class TownyPlayerListener implements Listener {
 			/*
 			 * Item_use protection.
 			 */
-			if (event.getPlayer().getItemInHand() != null) {
+			ItemStack hand = (event.getHand() == EquipmentSlot.HAND) ? event.getPlayer().getInventory().getItemInMainHand() : event.getPlayer().getInventory().getItemInOffHand();
+			if (hand != null) {
 
 				/*
 				 * Info Tool
 				 */
-				if (event.getPlayer().getItemInHand().getType() == Material.getMaterial(TownySettings.getTool())) {
+				if (hand.getType() == Material.getMaterial(TownySettings.getTool())) {
 
 					Entity entity = event.getRightClicked();
 
@@ -490,8 +495,8 @@ public class TownyPlayerListener implements Listener {
 
 				}
 
-				if (TownySettings.isItemUseMaterial(event.getPlayer().getItemInHand().getType().name())) {
-					event.setCancelled(onPlayerInteract(event.getPlayer(), null, event.getPlayer().getItemInHand()));
+				if (TownySettings.isItemUseMaterial(hand.getType().name())) {
+					event.setCancelled(onPlayerInteract(event.getPlayer(), null, hand));
 					return;
 				}
 			}
@@ -909,7 +914,6 @@ public class TownyPlayerListener implements Listener {
 
 		} catch (NotRegisteredException e) {
 			// If not registered, it is most likely an NPC			
-		} catch (TownyException e) {
 		}
 		
 	}

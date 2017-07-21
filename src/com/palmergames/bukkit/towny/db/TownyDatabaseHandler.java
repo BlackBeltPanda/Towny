@@ -800,7 +800,7 @@ public abstract class TownyDatabaseHandler extends TownyDataSource {
 						e.printStackTrace();
 					}
 				} else
-					toSave.remove(toCheck);
+					toSaveNation.remove(toCheck);
 
 			for (Nation toCheck : toSaveNation)
 				saveNation(toCheck);
