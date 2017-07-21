@@ -126,8 +126,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_CLAIM.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-					if (TownyUniverse.isWarTime())
-						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+					//if (TownyUniverse.isWarTime()) throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
 					List<WorldCoord> selection = AreaSelectionUtil.selectWorldCoordArea(resident, new WorldCoord(world, Coord.parseCoord(player)), StringMgmt.remFirstArg(split));
 					// selection = TownyUtil.filterUnownedPlots(selection);
@@ -172,8 +171,7 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 					if (!TownyUniverse.getPermissionSource().testPermission(player, PermissionNodes.TOWNY_COMMAND_PLOT_UNCLAIM.getNode()))
 						throw new TownyException(TownySettings.getLangString("msg_err_command_disable"));
 
-					if (TownyUniverse.isWarTime())
-						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+					//if (TownyUniverse.isWarTime()) throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
 					if (split.length == 2 && split[1].equalsIgnoreCase("all")) {
 						// Start the unclaim task

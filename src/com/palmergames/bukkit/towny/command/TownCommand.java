@@ -1203,8 +1203,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					TownBlock townBlock;
 					TownyWorld world;
 					try {
-						if (TownyUniverse.isWarTime())
-							throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+						if (TownyUniverse.isWarTime() && town.hasNation()) {
+							if (!town.getNation().isNeutral())
+								throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+						}
 
 						world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
 						if (world.getMinDistanceFromOtherTowns(coord, resident.getTown()) < TownySettings.getMinDistanceFromTownHomeblocks())
@@ -1391,8 +1393,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 	public void newTown(Player player, String name, String mayorName) {
 
 		try {
-			if (TownyUniverse.isWarTime())
-				throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+			//if (TownyUniverse.isWarTime()) throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
 
 			if (TownySettings.hasTownLimit() && TownyUniverse.getDataSource().getTowns().size() >= TownySettings.getTownLimit())
 				throw new TownyException(TownySettings.getLangString("msg_err_universe_limit"));
@@ -1519,11 +1520,13 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		Town town;
 		try {
 			// TODO: Allow leaving town during war.
-			if (TownyUniverse.isWarTime())
-				throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
-
 			resident = TownyUniverse.getDataSource().getResident(player.getName());
 			town = resident.getTown();
+			if (TownyUniverse.isWarTime() && town.hasNation()) {
+				if (!town.getNation().isNeutral())
+					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+			}
+
 			plugin.deleteCache(resident.getName());
 
 		} catch (TownyException x) {
@@ -2401,12 +2404,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Town town;
 			TownyWorld world;
 			try {
-				if (TownyUniverse.isWarTime())
-					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
-
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 				world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+				
+				if (TownyUniverse.isWarTime() && town.hasNation()) {
+					if (!town.getNation().isNeutral())
+						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+				}
 
 				if (!world.isUsingTowny())
 					throw new TownyException(TownySettings.getLangString("msg_set_use_towny_off"));
@@ -2492,12 +2497,14 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			Town town;
 			TownyWorld world;
 			try {
-				if (TownyUniverse.isWarTime())
-					throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
-
 				resident = TownyUniverse.getDataSource().getResident(player.getName());
 				town = resident.getTown();
 				world = TownyUniverse.getDataSource().getWorld(player.getWorld().getName());
+				
+				if (TownyUniverse.isWarTime() && town.hasNation()) {
+					if (!town.getNation().isNeutral())
+						throw new TownyException(TownySettings.getLangString("msg_war_cannot_do"));
+				}
 
 				List<WorldCoord> selection;
 				if (split.length == 1 && split[0].equalsIgnoreCase("all")) {
