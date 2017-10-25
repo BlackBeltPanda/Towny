@@ -414,6 +414,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 						targetTown = target.getTown();
 					} catch (Exception e1) {
 					}
+					if (targetTown.getMayor().equals(target)) return;
 					if (targetTown != null)
 						if (targetTown == town){
 							townRemoveResident(town, target);
@@ -1934,6 +1935,9 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					} else if (!TownyUniverse.getPermissionSource().has(BukkitTools.getPlayer(newMember.getName()), PermissionNodes.TOWNY_TOWN_RESIDENT.getNode())) {
 						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_not_allowed_join"), newMember.getName()));
 						invited.remove(newMember);
+					} else if (TownySettings.getMaxResidentsPerTown() > 0 && town.getResidents().size() >= TownySettings.getMaxResidentsPerTown()){
+						TownyMessaging.sendErrorMsg(sender, String.format(TownySettings.getLangString("msg_err_max_residents_per_town_reached"), TownySettings.getMaxResidentsPerTown() ));
+						invited.remove(newMember);	
 					} else {
 						town.addResidentCheck(newMember);
 						townInviteResident(town, newMember);
